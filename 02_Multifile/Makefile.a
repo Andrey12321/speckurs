@@ -1,0 +1,66 @@
+GENERATES = prog README liboutput_static.a liboutput.so
+TRASH = *.o *~ o.* outfile*  # Включаем выходные файлы из тестов
+LIBS = liboutput_static.a liboutput.so
+BINS = prog prog-a prog-so
+
+OBJS = const.o fun.o prog.o
+
+%.o: %.c
+	cc -fPIC $< -c -o $@
+
+all: $(GENERATES) $(BINS)
+
+liboutput_static.a: fun.o const.o
+	ar rcs $@ $^
+
+liboutput.so: fun.o const.o
+	cc -shared -o $@ $^
+
+prog: $(OBJS)
+	cc $^ -o $@
+
+prog-a: prog.o liboutput_static.a
+	cc prog.o -o $@ -L. -loutput_static
+
+prog-so: prog.o liboutput.so
+	cc prog.o -o $@ -L. -loutput
+
+README: prog
+	./$< 2> $@
+
+test: prog prog-a prog-so
+	@echo "Тестирование prog без параметров..."
+	./prog > outfile1 2>&1
+	@echo "Тестирование prog с одним параметром..."
+	./prog arg1 > outfile2 2>&1
+	@echo "Тестирование prog с тремя параметрами..."
+	./prog arg1 arg2 arg3 > outfile3 2>&1
+
+	@echo "Тестирование prog-a без параметров..."
+	./prog-a > outfile4 2>&1
+	@echo "Тестирование prog-a с одним параметром..."
+	./prog-a arg1 > outfile5 2>&1
+	@echo "Тестирование prog-a с тремя параметрами..."
+	./prog-a arg1 arg2 arg3 > outfile6 2>&1
+
+	@echo "Тестирование prog-so без параметров..."
+	./prog-so > outfile7 2>&1
+	@echo "Тестирование prog-so с одним параметром..."
+	./prog-so arg1 > outfile8 2>&1
+	@echo "Тестирование prog-so с тремя параметрами..."
+	./prog-so arg1 arg2 arg3 > outfile9 2>&1
+
+	# Сравнение выходных файлов
+	@echo "Сравнение выходных файлов..."
+	cmp outfile1 outfile4 || echo "Не совпадают выходы prog и prog-a"
+	cmp outfile1 outfile7 || echo "Не совпадают выходы prog и prog-so"
+	cmp outfile2 outfile5 || echo "Не совпадают выходы prog и prog-a с одним аргументом"
+	cmp outfile2 outfile8 || echo "Не совпадают выходы prog и prog-so с одним аргументом"
+	cmp outfile3 outfile6 || echo "Не совпадают выходы prog и prog-a с тремя аргументами"
+	cmp outfile3 outfile9 || echo "Не совпадают выходы prog и prog-so с тремя аргументами"
+
+clean:
+	rm -f $(TRASH)
+
+distclean: clean
+	rm -rf $(GENERATES)
