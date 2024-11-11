@@ -1,0 +1,19 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: ru\n"
+
+msgid "Think of a number between 1 and 100.\n"
+msgstr "Загадайте число от 1 до 100.\n"
+
+msgid "Is the number greater than %d? (yes/no)\n"
+msgstr "Число больше %d? (да/нет)\n"
+
+msgid "Input error. Please try again.\n"
+msgstr "Ошибка ввода. Попробуйте снова.\n"
+
+msgid "Input error. Please enter 'yes' or 'no'.\n"
+msgstr "Ошибка ввода. Пожалуйста, введите 'да' или 'нет'.\n"
+
+msgid "Your number is %d!\n"
+msgstr "Ваше число %d!\n"
