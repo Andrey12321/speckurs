@@ -1,0 +1,4 @@
+ALL_LINGUAS = en es ru
+GETTEXT_PACKAGE = hello_world_project
+SUBDIRS = .
+DISTCLEANFILES = Makefile.in.in

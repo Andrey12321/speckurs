@@ -1,0 +1,7 @@
+# Doxyfile configuration for Doxygen
+
+PROJECT_NAME = "Hello World Project"
+OUTPUT_DIRECTORY = ../docs
+INPUT = ../src
+RECURSIVE = NO
+GENERATE_LATEX = NO
